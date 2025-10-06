@@ -1,0 +1,236 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Range Poker Trainer</title>
+  <link rel="stylesheet" href="style.css?v=10" />
+</head>
+<body>
+  <header class="app-header">
+    <h1>Range Poker Trainer</h1>
+  </header>
+
+  <main class="app">
+    <!-- ================= ÉDITEUR ================= -->
+    
+    <section id="editorPage" class="page">
+      <div class="editor-layout">
+        <aside class="side">
+
+          <div class="sb-card">
+            <div class="sb-title">Positions</div>
+
+            <div class="sb-group">
+              <label class="sb-title" for="spotSelect" style="text-transform:none;margin:0">Type de spot</label>
+              <select id="spotSelect">
+                <option value="rfi">RFI (Open)</option>
+                <option value="def_v_open">Défense vs Open</option>
+                <option value="def_v_3bet">Défense vs 3bet</option>
+                <option value="def_v_4bet">Défense vs 4bet</option>
+              </select>
+            </div>
+
+            <div class="pos-layout">
+              <div class="sb-group">
+                <label class="sb-title" style="text-transform:none;margin:0">Position Hero</label>
+                <div class="pos-buttons" id="posGroup">
+                  <button class="pos-btn active" data-pos="UTG">UTG</button>
+                  <button class="pos-btn" data-pos="HJ">HJ</button>
+                  <button class="pos-btn" data-pos="CO">CO</button>
+                  <button class="pos-btn" data-pos="BTN">BTN</button>
+                  <button class="pos-btn" data-pos="SB">SB</button>
+                  <button class="pos-btn" data-pos="BB">BB</button>
+                </div>
+              </div>
+
+              <div class="sb-group">
+                <label class="sb-title" style="text-transform:none;margin:0">Position Vilain</label>
+                <div class="pos-buttons" id="villainGroup">
+                  <button class="pos-btn" data-pos="UTG">UTG</button>
+                  <button class="pos-btn" data-pos="HJ">HJ</button>
+                  <button class="pos-btn" data-pos="CO">CO</button>
+                  <button class="pos-btn" data-pos="BTN">BTN</button>
+                  <button class="pos-btn" data-pos="SB">SB</button>
+                  <button class="pos-btn active" data-pos="BB">BB</button>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <details class="sb-collapsible" open>
+            <summary>Filtres de mains (Quizz)</summary>
+            <div class="sb-card" style="background:transparent;border:none;box-shadow:none;padding:0">
+              <div class="qo-grid">
+                <label><input type="checkbox" class="qo" value="pp"/> PP</label>
+                <label><input type="checkbox" class="qo" value="sc"/> SC</label>
+                <label><input type="checkbox" class="qo" value="suited"/> Suited</label>
+                <label><input type="checkbox" class="qo" value="offsuit"/> Offsuit</label>
+                <label><input type="checkbox" class="qo" value="Ax"/> Ax</label>
+                <label><input type="checkbox" class="qo" value="Kx"/> Kx</label>
+                <label><input type="checkbox" class="qo" value="Qx"/> Qx</label>
+                <label><input type="checkbox" class="qo" value="Jx"/> Jx</label>
+                <label><input type="checkbox" class="qo" value="Tx"/> Tx</label>
+                <label><input type="checkbox" class="qo" value="9x"/> 9x</label>
+                <label><input type="checkbox" class="qo" value="8x"/> 8x</label>
+                <label><input type="checkbox" class="qo" value="7x"/> 7x</label>
+                <label><input type="checkbox" class="qo" value="6x"/> 6x</label>
+                <label><input type="checkbox" class="qo" value="5x"/> 5x</label>
+                <label><input type="checkbox" class="qo" value="4x"/> 4x</label>
+                <label><input type="checkbox" class="qo" value="3x"/> 3x</label>
+                <label><input type="checkbox" class="qo" value="2x"/> 2x</label>
+              </div>
+              <small class="muted">Appliqués automatiquement au lancement du quizz.</small>
+            </div>
+          </details>
+
+          <div class="sb-card">
+            <div class="sb-title">Options du quizz</div>
+            <div class="sb-row single">
+              <div class="sb-group">
+                <label class="sb-title" for="quizCount" style="text-transform:none">Nombre de mains</label>
+                <input id="quizCount" type="number" min="0" value="0" />
+                <small class="muted">0 = toutes</small>
+              </div>
+              <div class="sb-group">
+                <label class="sb-title" style="text-transform:none">&nbsp;</label>
+                <button id="applyConfigBtn" class="btn">Valider la configuration</button>
+              </div>
+            </div>
+          </div>
+        
+
+        <section class="main">
+          <div class="right-stack">
+            <section id="importPanel" class="import-box">
+              <div class="import-row">
+                <label for="flopzillaInput">Import Flopzilla</label>
+                <textarea id="flopzillaInput" rows="3" placeholder="AA, KK-88, AKo, AKs-AQs, KTs+, A2s+, KTo+"></textarea>
+              </div>
+              <div class="import-row controls">
+                <div class="control">
+                  <label for="importAction">Action</label>
+                  <select id="importAction">
+                    <option value="open">Open</option>
+                    <option value="call">Call</option>
+                    <option value="3bet">3bet</option>
+                    <option value="4bet">4bet</option>
+                    <option value="shove">AL'IN</option>
+                  </select>
+                </div>
+                <div class="control">
+                  <label>%</label>
+                  <input id="importPercent" type="number" min="1" max="100" value="100" />
+                </div>
+                <div class="control">
+                  <label class="check"><input type="checkbox" id="replaceBeforeImport"/> Remplacer avant import</label>
+                </div>
+                <div class="control buttons">
+                  <button id="importBtn" class="btn">Importer</button>
+                  <button id="clearAllBtn" class="btn">Effacer</button>
+                </div>
+              </div>
+            </section>
+         </aside>   
+
+<section class="main">
+  <div class="right-stack">
+    <div class="range-panel">
+      <div class="sticky-top">
+        <p class="hint">Choisis une action puis peins ta range…</p>
+        <div id="actionBar" class="action-bar"></div>
+        <div class="slider-box">
+          <label>% <span id="percentOut">100</span></label>
+          <input id="actionPercent" type="range" min="1" max="100" value="100" />
+        </div>
+      </div>
+      <div id="chartContainer" class="chart"></div>
+    </div>
+
+    <div class="row center gap" style="margin-top:4px">
+      <button id="startQuizBtn" class="btn primary">Commencer l'entraînement</button>
+    </div>
+  </div>
+</section>
+
+    <!-- ================= QUIZZ ================= -->
+    <section id="quizPage" class="page hidden">
+      <div class="quizfs">
+        <header class="quizfs-top">
+          <div class="progress"><div id="quizProgress" class="bar"></div></div>
+          <div class="score">Score: <span id="quizScore">0</span></div>
+        </header>
+
+        <main class="quizfs-main">
+          <div class="hand-badge" id="quizHandLabel">AKs</div>
+
+          <div class="alloc-panel">
+            <div class="alloc-row">
+              <div class="alloc-actions">
+                <button class="a-btn" data-act="fold">Fold</button>
+                <button class="a-btn" data-act="open">Open</button>
+                <button class="a-btn" data-act="call">Call</button>
+                <button class="a-btn" data-act="3bet">3bet</button>
+                <button class="a-btn" data-act="4bet">4bet</button>
+                <button class="a-btn" data-act="shove">Shove</button>
+              </div>
+
+              <div class="alloc-ctrls">
+                <input type="number" id="allocPct" min="1" max="100" value="100" />
+                <button id="allocAddBtn" class="btn">Ajouter</button>
+              </div>
+            </div>
+
+            <div class="alloc-current">
+              <span class="muted">Répartition :</span>
+              <div id="allocChips" class="chips"></div>
+              <div class="alloc-sum">Total: <span id="allocSum">0</span>%</div>
+            </div>
+          </div>
+
+          <div class="quizfs-actions">
+            <button id="quizClearAlloc" class="btn">Effacer</button>
+            <button id="quizSubmitBtn" class="btn primary">Valider</button>
+          </div>
+        </main>
+      </div>
+    </section>
+
+    <!-- ================= RÉSULTATS ================= -->
+    <section id="resultPage" class="page hidden">
+      <div class="result-box">
+        <h2>Résultats</h2>
+        <p>Score final : <b><span id="finalScore">0</span></b> / <span id="finalTotal">0</span></p>
+
+        <div class="legend">
+          <span class="leg leg-ok">Correct</span>
+          <span class="leg leg-err">Erreur</span>
+        </div>
+
+        <div id="resultChart" class="chart chart-sm"></div>
+        <div class="card full">
+        <h3>Ta range jouée</h3>
+        <div id="resultsRange" class="range-grid"></div>
+        <p class="muted" style="margin-top:8px">Contour rouge = erreur • Point coloré = action choisie</p>
+        </div>
+
+        
+        <h3>À travailler</h3>
+        <ul id="mistakesList" class="mistakes"></ul>
+
+        <div class="row center gap">
+          <button id="practiceBtn" class="btn">Travailler ces mains</button>
+          <button id="restartBtn" class="btn">Rejouer</button>
+          <button id="backBtn" class="btn primary">Retour éditeur</button>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <footer class="app-footer">
+    <small>© 2025 sRodDev — Range Trainer — Tous droits réservés </small>
+  </footer>
+
+  <script src="app.js?v=10"></script>
+</body>
+</html>

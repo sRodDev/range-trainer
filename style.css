@@ -1,0 +1,375 @@
+/* ===== Range Trainer v3.1 — CSS compact ===== */
+:root{
+  --bg:#0f1115; --fg:#e7e9ee; --muted:#9aa4b2;
+  --panel:#141821; --panel2:#1a2030; --stroke:#2a3142; --accent:#7c3aed;
+  --fold:#ef4444; --open:#60a5fa; --call:#86efac; --three:#fdba74; --four:#f87171; --shove:#a78bfa;
+  --footer-h:56px;
+}
+
+*{box-sizing:border-box}
+html,body{height:100%;min-height:100vh;margin:0;background:var(--bg);color:var(--fg);
+  font-family:system-ui,-apple-system,Segoe UI,Inter,Roboto,Arial}
+.page{display:block}.page.hidden{display:none!important}
+
+.app{max-width:1320px;margin:0 auto;padding:0 20px 64px}
+/* footer fixe + compensation */
+.app{padding-bottom:calc(var(--footer-h) + 16px + env(safe-area-inset-bottom))}
+.app-header{ text-align:center; padding:16px 0; font-size:24px; font-weight:600; letter-spacing:.5px }
+.app-footer{
+  position:fixed; left:0; right:0; bottom:0; height:var(--footer-h);
+  display:flex; align-items:center; justify-content:center;
+  background:var(--bg); color:var(--muted); border-top:1px solid var(--stroke)
+}
+
+/* ===== Layout éditeur : 2 colonnes nettes ===== */
+.editor-layout{
+  display:grid; grid-template-columns:380px 1fr; column-gap:24px; align-items:start; position:relative
+}
+/* filet discret entre colonnes */
+.editor-layout::after{
+  content:""; position:absolute; top:0; bottom:0; left:380px; width:1px;
+  background:color-mix(in srgb, var(--stroke) 40%, transparent); pointer-events:none
+}
+.side{display:flex;flex-direction:column;gap:12px;min-width:0}
+.right-stack{display:flex;flex-direction:column;gap:12px;min-width:0}
+
+/* ===== Panneaux / cartes ===== */
+.sb-card, .import-box, .range-panel{
+  background:var(--panel); border:1px solid var(--stroke); border-radius:12px; padding:12px 14px
+}
+.sb-title{font-weight:800;color:var(--muted);text-transform:uppercase;letter-spacing:.35px;margin:0 0 8px}
+
+/* ===== Positions ===== */
+.pos-buttons{display:flex;flex-wrap:wrap;gap:8px}
+.pos-btn{
+  background:var(--panel2); color:var(--fg); border:1px solid var(--stroke);
+  border-radius:10px; padding:7px 10px; font-weight:700; cursor:pointer
+}
+.pos-btn.active{outline:2px solid var(--accent)}
+
+/* ===== Filtres Quizz ===== */
+.qo-grid{display:grid;grid-template-columns:repeat(6,1fr);gap:8px}
+.qo-grid label{
+  display:flex;align-items:center;gap:8px;background:var(--panel2);
+  border:1px solid var(--stroke); border-radius:10px; padding:6px 8px; font-size:13px; cursor:pointer
+}
+
+/* ===== Import Flopzilla (gauche) ===== */
+.import-box{background:var(--panel2)}
+.import-row{display:grid;gap:8px;margin-bottom:10px}
+.import-row.controls{display:grid;grid-template-columns:120px 70px 1fr auto;gap:10px;align-items:end}
+#importAction,#importPercent,#flopzillaInput{
+  background:var(--panel); color:var(--fg); border:1px solid var(--stroke);
+  border-radius:10px; padding:8px 10px; font:inherit
+}
+
+/* ===== Range (droite) ===== */
+.range-panel{
+  background:linear-gradient(180deg,var(--panel2) 0%, var(--panel) 100%);
+  max-width:940px; width:100%; margin:0 auto
+}
+.hint{margin:0 0 8px;color:var(--muted);font-size:13px}
+.action-bar{display:flex;justify-content:center;flex-wrap:wrap;gap:8px;margin:8px 0 10px}
+.action-bar .abtn{
+  padding:7px 12px; border-radius:10px; border:1px solid var(--stroke);
+  background:var(--panel2); color:var(--fg); font-weight:700; cursor:pointer
+}
+.action-bar .abtn.active{background:var(--accent);border-color:transparent;color:#fff}
+.slider-box{display:flex;align-items:center;gap:10px;justify-content:center;margin-bottom:10px}
+#actionPercent{width:min(520px,80vw)}
+
+/* Grille des combos */
+.chart{
+  display: grid;
+  grid-template-columns: repeat(13, var(--cell));
+  gap: 4px;
+  justify-content: center;
+  border: 1px solid var(--stroke);
+  border-radius: 12px;
+  padding: 10px;
+  background: color-mix(in srgb, var(--panel2) 96%, transparent);
+}
+.card-cell{
+  width: var(--cell);
+  height: var(--cell);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border: 1px solid var(--stroke);
+  background: var(--panel2);
+  border-radius: 6px;
+  font-size: 12px;
+  font-weight: 700;
+  cursor: pointer;
+  user-select: none;
+}
+
+
+/* ===== Boutons génériques ===== */
+.btn{
+  background:var(--panel2); color:var(--fg); border:1px solid var(--stroke);
+  border-radius:10px; padding:10px 14px; font-weight:700; cursor:pointer
+}
+.btn.primary{background:var(--accent);color:#fff;border:none}
+
+/* Bouton “Commencer” centré sous la range */
+.start-row{ display:flex; justify-content:center; gap:10px; margin-top:8px; }
+
+/* ===== Quiz (plein écran) — minimal ===== */
+.quizfs{min-height:70vh;display:flex;flex-direction:column;gap:16px;align-items:center}
+.quizfs-top{width:100%;display:flex;align-items:center;gap:16px}
+.progress{flex:1;height:10px;background:#222839;border-radius:999px;overflow:hidden;border:1px solid var(--stroke)}
+.progress .bar{height:100%;width:0%;background:var(--accent);transition:width .25s ease}
+.score{color:var(--muted);font-weight:800}
+.quizfs-main{display:flex;flex-direction:column;align-items:center;gap:16px}
+.hand-badge{
+  font-size:56px;font-weight:900;letter-spacing:.5px;
+  background:linear-gradient(135deg,#7c3aed,#0ea5e9);-webkit-background-clip:text;background-clip:text;color:transparent
+}
+.a-btn{background:var(--panel2);border:1px solid var(--stroke);color:var(--fg);border-radius:10px;padding:10px 12px;font-weight:800;cursor:pointer}
+.a-btn.active{outline:2px solid var(--accent)}
+
+/* ===== Responsive ===== */
+@media (max-width:1200px){
+  .editor-layout{grid-template-columns:350px 1fr;column-gap:20px}
+  .editor-layout::after{left:350px;opacity:.5}
+  .range-panel{max-width:820px}
+}
+@media (max-width:992px){
+  .editor-layout{grid-template-columns:1fr}
+  .editor-layout::after{display:none}
+  .range-panel{max-width:100%}
+  .import-row.controls{grid-template-columns:110px 64px 1fr auto}
+}
+@media (max-width:600px){
+  .action-bar .abtn{padding:6px 10px;font-size:13px}
+  .qo-grid{grid-template-columns:repeat(3,1fr)}
+}
+
+#chartContainer, .chart{
+  display:grid;
+  grid-template-columns: repeat(13, var(--cell));
+  gap:4px;
+  justify-content:center;
+  border:1px solid var(--stroke);
+  border-radius:12px;
+  padding:10px;
+  background: color-mix(in srgb, var(--panel2) 96%, transparent);
+}
+
+/* Tout enfant direct de la grille = une case (robuste aux classes) */
+#chartContainer > *, .chart > *{
+  width:var(--cell); height:var(--cell);
+  display:flex; align-items:center; justify-content:center;
+  border:1px solid var(--stroke);
+  background:var(--panel2);
+  border-radius:6px;
+  font-size:12px; font-weight:700;
+  user-select:none; cursor:pointer;
+}
+
+/* === PATCH B — Filtres quizz: jamais plus larges que la colonne === */
+.qo-grid{ 
+  grid-template-columns: repeat(4, minmax(0,1fr));  /* 4 par ligne */
+  gap:8px;
+}
+.qo-grid label{ min-width:0; } /* autorise la contraction sans débordement */
+@media (max-width:1280px){
+  .qo-grid{ grid-template-columns: repeat(3, minmax(0,1fr)); } /* plus sûr sur laptop */
+}
+
+/* === PATCH C — Import: mise en ligne fluide + pas de débordement === */
+.import-row.controls{
+  display:grid;
+  grid-template-columns: 120px 72px 1fr auto;  /* Action | % | checkbox | boutons */
+  gap:10px; align-items:end;
+}
+.control.buttons{
+  display:flex; gap:8px; justify-self:end; flex-wrap:nowrap;
+}
+.control.buttons .btn{ white-space:nowrap; }
+
+@media (max-width:1280px){
+  /* Sur largeur plus serrée: les boutons passent à la ligne proprement */
+  .import-row.controls{ grid-template-columns: 1fr 72px 1fr; }
+  .control.buttons{ grid-column: 1 / -1; justify-self:start; }
+}
+
+/* Sécurité: aucun composant de la colonne gauche ne dépasse visuellement */
+.side{ min-width:0; }
+.side *{ max-width:100%; }
+
+/* === 1) RANGE : force la grille 13×13 === */
+:root { --cell: 39px; }                 /* ajuste 36–40 si tu veux */
+.range-panel .chart{
+  display:grid !important;
+  grid-template-columns: repeat(13, var(--cell));
+  gap:4px; justify-content:center;
+  border:1px solid var(--stroke); border-radius:12px; padding:10px;
+  background: color-mix(in srgb, var(--panel2) 96%, transparent);
+}
+/* Si le JS crée des "rows", on les neutralise pour que les cases s'alignent en grille */
+.range-panel .chart .row{ display: contents; }
+.range-panel .chart .card-cell{
+  width:var(--cell); height:var(--cell);
+  display:flex; align-items:center; justify-content:center;
+  border:1px solid var(--stroke); background:var(--panel2); border-radius:6px;
+  font-size:12px; font-weight:700; user-select:none; cursor:pointer;
+}
+
+/* === 2) OPTIONS QUIZZ : le '0 = toutes' reste sous l'input === */
+.sb-row.single{ 
+  display:grid; grid-template-columns: 1fr auto; gap:12px; align-items:end;
+}
+.sb-group{ display:flex; flex-direction:column; gap:6px; }
+#quizCount{ width:100%; }
+.sb-group small.muted{ display:block; margin-top:2px; }
+
+/* === 3) IMPORT : boutons contenus, pas de débordement à droite === */
+.import-row.controls{
+  display:grid;
+  grid-template-columns: 110px 70px 1fr auto; /* Action | % | checkbox | boutons */
+  gap:10px; align-items:end; max-width:100%;
+}
+.control.buttons{
+  display:flex; gap:8px; justify-self:end; flex-wrap:wrap; max-width:100%;
+}
+.control.buttons .btn{ white-space:nowrap; }
+
+/* Sur largeur plus serrée, on fait passer les boutons à la ligne proprement */
+@media (max-width: 1280px){
+  .import-row.controls{ grid-template-columns: 1fr 70px 1fr; }
+  .control.buttons{ grid-column: 1 / -1; justify-self:start; }
+}
+
+/* Sécurité : rien ne dépasse de la colonne gauche */
+.side{ min-width:0; }
+.side *{ max-width:100%; }
+
+/* Centrer la consigne (hint) dans le panneau de range */
+.range-panel .hint{
+  text-align: center;
+  font-size: 14px;
+  margin: 0 0 10px;
+}
+
+/* Centrer la ligne du bouton sous la range */
+.start-row{
+  display: flex;
+  justify-content: center;
+  margin-top: 12px;
+}
+
+/* Bouton “Commencer l'entraînement” un peu plus gros et mis en valeur */
+#startQuizBtn{
+  padding: 12px 22px;          /* plus grand */
+  font-size: 15px;
+  border-radius: 12px;
+  min-width: 220px;            /* meilleure présence visuelle */
+}
+
+#startQuizBtn.btn.primary{
+  background: var(--accent);
+  border: none;
+  box-shadow: 0 8px 22px rgba(124,58,237,.28);
+  transition: transform .15s ease, box-shadow .2s ease;
+}
+
+#startQuizBtn.btn.primary:hover{
+  transform: translateY(-1px);
+  box-shadow: 0 12px 28px rgba(124,58,237,.33);
+}
+
+/* Consigne en haut de la range, centrée */
+.range-panel .hint{
+  text-align: center;
+  font-size: 14px;
+  margin: 0 0 10px;
+}
+
+/* Si ton wrapper est .row center gap, centre-le proprement */
+.right-stack .row.center{
+  display: flex;
+  justify-content: center;
+  gap: 8px;
+}
+
+/* Centrage robuste du bouton (fonctionne avec grid/flex/flow) */
+#startQuizBtn{
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  margin: 12px auto 0;   /* centre si flux normal */
+  justify-self: center;  /* centre si parent = grid */
+  align-self: center;    /* centre si parent = flex */
+  min-width: 220px;
+  padding: 12px 22px;
+  font-size: 15px;
+  border-radius: 12px;
+}
+
+/* Style "primary" un peu plus visible */
+#startQuizBtn.btn.primary{
+  background: var(--accent);
+  border: none;
+  box-shadow: 0 8px 22px rgba(124,58,237,.28);
+  transition: transform .15s ease, box-shadow .2s ease;
+}
+#startQuizBtn.btn.primary:hover{
+  transform: translateY(-1px);
+  box-shadow: 0 12px 28px rgba(124,58,237,.33);
+}
+
+.range-grid{
+  display:grid;
+  grid-template-columns:repeat(13,minmax(0,1fr));
+  gap:4px;
+}
+.range-cell{
+  position:relative;
+  aspect-ratio:1/1;
+  border:1px solid var(--stroke,#2a3142);
+  border-radius:8px;
+  display:flex; align-items:center; justify-content:center;
+  font-size:12px; line-height:1; user-select:none;
+  background:rgba(255,255,255,0.02);
+}
+.range-cell.err{
+  box-shadow:0 0 0 2px var(--err,#ef4444) inset;
+}
+.range-cell .lab{opacity:.9}
+.range-cell .badge{
+  position:absolute; right:6px; bottom:6px;
+  width:8px; height:8px; border-radius:50%;
+  box-shadow:0 0 0 2px rgba(0,0,0,.25);
+}
+
+/* Couleurs badge par action (facultatif, adapte à ta palette) */
+.badge.fold{ background: var(--fold,#ef4444) }
+.badge.call{ background: var(--call,#86efac) }
+.badge.open{ background: var(--open,#60a5fa) }
+.badge.\33 bet{ background: var(--three,#fdba74) }   /* .3bet doit s’échapper */
+.badge.\34 bet{ background: var(--four,#f87171) }    /* .4bet doit s’échapper */
+.badge.shove{ background: var(--shove,#a78bfa) }
+
+/* Grille récap range sur la page résultats */
+.range-grid{
+  display:grid;
+  grid-template-columns:repeat(13,minmax(0,1fr));
+  gap:4px;
+}
+.range-cell{
+  position:relative;
+  aspect-ratio:1/1;
+  border:1px solid var(--stroke,#2a3142);
+  border-radius:8px;
+  display:flex;align-items:center;justify-content:center;
+  font-size:12px;line-height:1;background:var(--panel2,#1a2030);
+  user-select:none;
+}
+/* Encadré rouge visible même si d’autres styles s’appliquent */
+.range-cell.err{
+  outline:2px solid var(--err,#ef4444);
+  outline-offset:-2px;
+}
+.range-cell .lab{opacity:.9}
